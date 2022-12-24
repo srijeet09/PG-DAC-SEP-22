@@ -1,0 +1,535 @@
+01. Create a program to create table named student having columns [ rno, name, marks, date of birth].
+02. Create a program to insert record in the student table.
+03. Create a program to select all of the student records.
+04. Create a program to display the student records in sorted order of marks [ highest to lowest ].
+05. Create a program to display no. of student records present in the table.
+06. Create a program to perform CRUD operations for student [ rno, name, marks, date of birth ] using Statement. Take values from keyboard.
+07. Create a program to search student record on the basis of given roll no.
+08. Create a program to display average marks obtained by the student.
+09. Create a program to perform CRUD operation for student [ rno,name,marks,date of birth ] using PreparedStatement. Take values from keyboard.
+10. Make a program that displays number of columns present in the given table.
+11. Create a program to call a stored procedure, created to insert student record [ rno, name, marks].
+12. There is need to store employee information [like : employee id, name, salary, join date] and employee's address information [like : address id, city, country, employee id]. Employee and Address information should be stored in separate tables. Create a program which can insert employee and address records. First store employee record and then address record. Make sure, if the address record is not saved then employee transaction should be rollbacked.
+13. Select the employee records with their address.
+14. Select the address of an employee whose employee id is given.
+15. Select all the employees who are in the given city.
+16. Select the employee who gets highest salary.
+17. Select all the employees who has experience more than 5 years.
+18. Create an event driven program as follows to manage the daily expenses
+a. create a table expense with columns expense_id, item, price, purchase_date to store expense record.
+b. create a java bean class named dto.Expense with properties expenseId, item, price, purchaseDate.
+c. create a dao interface dao.ExpenseDao that has method declaration for insert, update, delete and select the expense record.
+d. create a dao class dao.ExpenseDaoImple that implements ExpenseDao and overrides all methods.
+e. create p01.Main class to demonstrate CRUD operation written in DAO class
+
+1)
+package empId;
+import java.sql.*;
+public class createTable {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+			boolean flag = s.execute("create table students2(rollno int(10) primary key,name varchar(50),marks int(100),birthyear date)");
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+2)package empId;
+import java.sql.*;
+import java.util.Scanner;
+import java.util.*;
+public class insert {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			PreparedStatement rs = con.prepareStatement("insert into students2 values(?,?,?,?)");
+			Scanner sc = new Scanner(System.in);
+			System.out.println("enter id");
+			int a = sc.nextInt();
+			rs.setInt(1, a);
+			System.out.println("enter name");
+			String a1 = sc.next();
+			rs.setString(2, a1);
+			System.out.println("enter marks");
+			int a2 = sc.nextInt();
+			rs.setInt(3, a2);
+			System.out.println("enter date");
+			String a3 = sc.next();
+			rs.setDate(4,java.sql.Date.valueOf(a3));
+			rs.execute();
+			
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+3)package empId;
+import java.sql.*;
+import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+			
+			ResultSet rs  = s.executeQuery("select * from students2");
+			while(rs.next()) {
+				System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getInt(3)+" "+rs.getDate(4));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+
+4)package empId;
+import java.sql.*;
+import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+			
+			ResultSet rs  = s.executeQuery("select * from students2 order by marks desc");
+			while(rs.next()) {
+				System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getInt(3)+" "+rs.getDate(4));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+5)package empId;
+import java.sql.*;
+import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+			
+			ResultSet rs  = s.executeQuery("select count(rollno) from students2");
+			while(rs.next()) {
+				System.out.println(rs.getInt(1));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+
+7)package empId;
+import java.sql.*;
+import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+			Scanner sc = new Scanner(System.in);
+			System.out.println("enter roll no");
+			int roll = sc.nextInt();
+			ResultSet rs  = s.executeQuery("select * from students2 where rollno="+roll);
+			while(rs.next()) {
+				System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getInt(3)+" "+rs.getDate(4));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+8)package empId;
+import java.sql.*;
+import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+//			Scanner sc = new Scanner(System.in);
+//			System.out.println("enter roll no");
+//			int roll = sc.nextInt();
+			ResultSet rs  = s.executeQuery("select avg(marks) from students2");
+			while(rs.next()) {
+				System.out.println(rs.getInt(1));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+10)package empId;
+import java.sql.*;
+import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+//			Scanner sc = new Scanner(System.in);
+//			System.out.println("enter roll no");
+//			int roll = sc.nextInt();
+			ResultSet rs  = s.executeQuery("SELECT count(*) as No_of_Column FROM information_schema.columns WHERE table_name = 'students2'");
+			while(rs.next()) {
+				System.out.println(rs.getInt(1));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+11)package empId;
+import java.sql.*;
+import java.util.Scanner;
+import java.util.*;
+public class insert {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			PreparedStatement rs = con.prepareStatement("call inserter(?,?,?,?)");
+			Scanner sc = new Scanner(System.in);
+			System.out.println("enter id");
+			int a = sc.nextInt();
+			rs.setInt(1, a);
+			System.out.println("enter name");
+			String a1 = sc.next();
+			rs.setString(2, a1);
+			System.out.println("enter marks");
+			int a2 = sc.nextInt();
+			rs.setInt(3, a2);
+			System.out.println("enter date");
+			String a3 = sc.next();
+			rs.setDate(4,java.sql.Date.valueOf(a3));
+			rs.execute();
+			
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+
+
+12)package Table;
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Scanner;
+
+import com.mysql.cj.exceptions.RSAException;
+
+public class Table {
+	public static void main(String args[]) {
+try {
+Class.forName("com.mysql.cj.jdbc.Driver");
+Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+con.setAutoCommit(false);
+Scanner sc = new Scanner(System.in);
+PreparedStatement rs = con.prepareStatement("insert into employee values(?,?,?,?)");
+System.out.println("enter id");
+int a = sc.nextInt();
+rs.setInt(1,a);
+System.out.println("Enter name");
+String b = sc.next();
+rs.setString(2, b);
+System.out.println("enter salary");
+int c = sc.nextInt();
+rs.setInt(3,c);
+System.out.println(" enter doj");
+String d = sc.next();
+rs.setDate(4,java.sql.Date.valueOf(d));
+rs.execute();
+PreparedStatement rsp = con.prepareStatement("insert into address values(?,?,?,?)");
+System.out.println("enter id");
+int a1 = sc.nextInt();
+rsp.setInt(1,a1);
+System.out.println("Enter city");
+String b1 = sc.next();
+rsp.setString(2, b1);
+System.out.println("Enter country");
+String c1 = sc.next();
+rsp.setString(3, c1);
+System.out.println("enter id");
+int d1 = sc.nextInt();
+rsp.setInt(4,d1);
+rsp.execute();
+con.commit();
+}
+
+
+
+
+13)package empId;
+import java.sql.*;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+			ResultSet rs  = s.executeQuery("select name,city,country from employee,address where employeeId = empid and employeeid = empid;");
+			while(rs.next()) {
+				System.out.println(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+
+14)
+
+
+package empId;
+import java.sql.*;
+import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+			Scanner sc = new Scanner(System.in);
+			System.out.println("enter id");
+			int id = sc.nextInt();
+			ResultSet rs  = s.executeQuery("select name,city,country from employee,address where empid ="+id+" and employeeId ="+id);
+			while(rs.next()) {
+				System.out.println(rs.getString(1)+" "+rs.getString(2)+" "+rs.getString(3));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+15)
+
+package empId;
+import java.sql.*;
+import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+			Scanner sc = new Scanner(System.in);
+			System.out.println("enter city");
+			String city = sc.next();
+			ResultSet rs  = s.executeQuery("select employeeid,name from employee,address where empid = employeeid and city = '"+city+"'");
+			while(rs.next()) {
+				System.out.println(rs.getInt(1)+" "+rs.getString(2));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+16)package empId;
+import java.sql.*;
+import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+			
+			ResultSet rs  = s.executeQuery("select name from employee where salary = (select max(salary) from employee)");
+			while(rs.next()) {
+				System.out.println(rs.getString(1));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+17)package empId;
+import java.sql.*;
+import java.util.Scanner;
+
+import com.mysql.cj.protocol.Resultset;
+public class Select {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/me?useSSL=false","root","Jacksparrow@95");
+			Statement s = con.createStatement();
+			
+			ResultSet rs  = s.executeQuery("select * from employee where year(date)<2017;");
+			while(rs.next()) {
+				System.out.println(rs.getInt(1)+" "+rs.getString(2)+" "+rs.getInt(3)+" "+rs.getDate(4));
+			}
+			s.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
